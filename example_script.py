@@ -5,7 +5,7 @@ import scipy.interpolate
 import fluid_prop
 import functions as fnc
 
-from PS2_Q3_supp import x_port_up, y_port_up, x_port_low, y_port_low
+from airfoil_geometry import x_port_up, y_port_up, x_port_low, y_port_low
 
 #plt.rcParams['text.usetex'] = True
 
@@ -114,15 +114,20 @@ def example_calculation(data_directory, group_name_prefix, alpha):
     # Plot the pressure profile as -Cp
     fig, (ax, ax2) = plt.subplots(2,1,sharex=True)
     fig.dpi = 150
+    ax.axvline(x = 0, color='gray')
+    ax.axvline(x = 1, color='gray')
+    ax2.axvline(x = 0, color='gray')
+    ax2.axvline(x = 1, color='gray')
     ax.plot(x_upper, -PS_upper_alpha.T / q_alpha, '-ob', label=r'Upper surface', linewidth=1, markersize=4)
     ax.plot(x_lower, -PS_lower_alpha.T / q_alpha, '-or', label=r'Lower surface', linewidth=1, markersize=4)
     ax.set_title('$\\alpha= %s ^{\\circ}$' % alpha, fontsize=16)
-    ax.legend(loc='lower right')
+    ax.legend(loc='best')
     ax.set_xlabel(r'$x/c$', fontsize=16)
     ax.set_ylabel(r'$-Cp$', fontsize=16)
     ax.set_xlim((0, 1))
-    
-    fnc.plot_pressure_vectors(ax2, x_port_up, y_port_up, x_port_low, y_port_low, PS_upper_alpha, PS_lower_alpha)
+
+    chord = 0.45
+    fnc.plot_pressure_vectors(ax2, x_port_up, y_port_up, x_port_low, y_port_low, PS_upper_alpha, PS_lower_alpha, chord)
     plt.show()
 
     # print results
@@ -136,7 +141,7 @@ def example_calculation(data_directory, group_name_prefix, alpha):
 if __name__ == "__main__":
     data_directory = 'raw_data/'
     group_name_prefix = 'Group13_370k'
-    alpha_list = [-8, -4,-6,-2,0,2,4,6,7,8,9,10,11,12,13,14,16,18]
+    alpha_list = [-8,-6,-4,-2,0,2,4,6,7,8,9,10,11,12,13,14,16,18]
     
     for alpha in alpha_list:    
         example_calculation(data_directory, group_name_prefix, alpha)
